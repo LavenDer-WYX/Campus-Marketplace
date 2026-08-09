@@ -1,0 +1,36 @@
+@{
+  ViewData["Title"] = "Profile";
+}
+
+@* 个人资料页面先放基本资料和商品列表 *@
+<section>
+ <h1>My Profile</h1>
+
+  <div class="profile-basic">
+    <div class="profile-photo">
+      Photo
+    </div>
+
+     <div>
+       <h2>Student Name</h2>
+
+       <p>
+         University verification: Not added yet
+       </p>
+
+       <button type="button"
+               class="btn btn-outline-dark">
+         Edit Profile
+       </button>
+     </div>
+  </div>
+
+ @* 这里以后可以分成 Active、Sold 和 Favourite *@
+ <div class="page-block">
+    <h2>My Items</h2>
+
+     <div class="empty-area">
+       The student's items will be shown here.
+     </div>
+ </div>
+</section>

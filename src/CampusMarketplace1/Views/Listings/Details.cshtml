@@ -1,0 +1,41 @@
+@{
+ ViewData["Title"] = "Item Details";
+}
+
+@* 商品详情页的基本左右结构 *@
+<section>
+  <h1>Item Details</h1>
+
+ <div class="details-layout">
+   <div class="details-image">
+      Item Image
+   </div>
+
+    <div class="details-information">
+      <h2>Item Name</h2>
+
+      <p>
+        Price: $0
+      </p>
+
+       <p>
+         Condition: Not added yet
+       </p>
+
+      <p>
+        Location: Not added yet
+      </p>
+
+      <h3>Description</h3>
+
+       <div class="text-placeholder">
+          The item description will be shown here.
+       </div>
+
+      <a class="btn btn-dark"
+         href="/Messages/Chat/@ViewData["ListingId"]">
+        Contact Seller
+      </a>
+    </div>
+ </div>
+</section>

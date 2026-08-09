@@ -1,0 +1,80 @@
+@{
+ ViewData["Title"] = "Home";
+}
+
+@* 首页标题区域，之后再决定文字和图片 *@
+<section class="home-title">
+   <h1>Campus Marketplace</h1>
+
+ <p>
+    Buy and sell items with other students.
+ </p>
+</section>
+
+@* 搜索框的框架，现在没有搜索功能 *@
+<section class="page-block">
+ <h2>Search</h2>
+
+   <div class="simple-search">
+     <input type="text"
+            class="form-control"
+            placeholder="Search for an item" />
+
+      <button type="button"
+              class="btn btn-dark">
+        Search
+      </button>
+   </div>
+</section>
+
+@* 分类按钮 *@
+<section class="page-block">
+   <h2>Categories</h2>
+
+ <div class="category-list">
+    <button type="button" class="btn btn-outline-secondary">
+      Textbooks
+    </button>
+
+     <button type="button" class="btn btn-outline-secondary">
+       Electronics
+     </button>
+
+    <button type="button" class="btn btn-outline-secondary">
+      Furniture
+    </button>
+
+       <button type="button" class="btn btn-outline-secondary">
+         Other
+       </button>
+ </div>
+</section>
+
+@* 热门商品卡片位置，商品资料以后再加入 *@
+<section class="page-block"
+         id="popularItems">
+  <h2>Popular Items</h2>
+
+ <div class="item-grid">
+    <div class="simple-item-card">
+       <div class="image-box">Image</div>
+       <h3>Item name</h3>
+       <p>Price</p>
+       <a href="/Listings/Details/1">View item</a>
+    </div>
+
+      <div class="simple-item-card">
+        <div class="image-box">Image</div>
+         <h3>Item name</h3>
+        <p>Price</p>
+         <a href="/Listings/Details/2">View item</a>
+      </div>
+
+   <div class="simple-item-card">
+      <div class="image-box">Image</div>
+      <h3>Item name</h3>
+       <p>Price</p>
+      <a href="/Listings/Details/3">View item</a>
+   </div>
+ </div>
+</section>

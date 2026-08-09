@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+ <meta name="viewport"
+       content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Campus Marketplace</title>
+
+  <link rel="stylesheet"
+        href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+ @* 这里是所有页面共用的导航栏 *@
+ <header>
+    <nav class="navbar navbar-expand-md navbar-light border-bottom">
+      <div class="container">
+
+        <a class="navbar-brand"
+           href="/">
+          Campus Marketplace
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainMenu"
+                aria-controls="mainMenu"
+                aria-expanded="false"
+                aria-label="Open menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse"
+             id="mainMenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+               <a class="nav-link" href="/">Home</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/#popularItems">Items</a>
+            </li>
+
+            <li class="nav-item">
+                 <a class="nav-link" href="/Messages/Chat/1">Messages</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/Profile">Profile</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/Account/Login">Login</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </nav>
+ </header>
+
+   <main class="container page-content">
+       @RenderBody()
+   </main>
+
+ @* 页脚后续还可以再讨论，现在只留文字 *@
+ <footer class="border-top simple-footer">
+   <div class="container">
+      Campus Marketplace - Week 2 Page Framework
+   </div>
+ </footer>
+
+ <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="~/js/site.js"
+           asp-append-version="true"></script>
+
+ @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

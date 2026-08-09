@@ -1,0 +1,41 @@
+@{
+   ViewData["Title"] = "Messages";
+}
+
+@* 聊天页面先分成会话列表和消息区域 *@
+<section>
+ <h1>Messages</h1>
+
+  <div class="chat-layout">
+    <aside class="conversation-list">
+      <h2>Conversations</h2>
+
+       <button type="button">
+         Student 1
+       </button>
+
+      <button type="button">
+        Student 2
+      </button>
+    </aside>
+
+     <div class="message-area">
+       <h2>Chat</h2>
+
+       <div class="message-box">
+          Messages will appear here.
+       </div>
+
+       <div class="message-input">
+         <input type="text"
+                class="form-control"
+                placeholder="Write a message" />
+
+          <button type="button"
+                  class="btn btn-dark">
+             Send
+          </button>
+       </div>
+     </div>
+  </div>
+</section>
