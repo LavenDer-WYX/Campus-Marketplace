@@ -1,0 +1,50 @@
+@model IReadOnlyList<Favourite>
+@{
+    ViewData["Title"] = "My favourites";
+}
+
+<h1>My favourites</h1>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-area">You have not saved any items yet.</div>
+}
+else
+{
+    <div class="item-grid">
+        @foreach (var favourite in Model)
+        {
+            var listing = favourite.Listing;
+            if (listing is null) continue;
+
+            <article class="item-card">
+                <div class="item-image">
+                    @if (listing.Photos.Count > 0)
+                    {
+                        <img src="@listing.Photos.First().ImageUrl" alt="@listing.Title" />
+                    }
+                    else
+                    {
+                        <span>@listing.Category?.Name</span>
+                    }
+                </div>
+                <div class="item-body">
+                    <span class="condition-badge condition-good">@listing.Condition</span>
+                    <h3>@listing.Title</h3>
+                    <p class="item-price">
+                        @(listing.ListingType == "Sale" && listing.Price.HasValue
+                            ? listing.Price.Value.ToString("C", CultureInfo.GetCultureInfo("en-NZ"))
+                            : listing.ListingType)
+                    </p>
+                    <div class="item-actions">
+                        <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.Id">View item</a>
+                        <form asp-action="Toggle" method="post">
+                            <input type="hidden" name="listingId" value="@listing.Id" />
+                            <button class="fav-btn fav-active" type="submit" aria-label="Remove from favourites">&#9829;</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+}

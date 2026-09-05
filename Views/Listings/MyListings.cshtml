@@ -1,0 +1,36 @@
+@model IReadOnlyList<Listing>
+@{
+    ViewData["Title"] = "My listings";
+}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>My listings</h1>
+    <a asp-action="Create" class="btn btn-dark">Create listing</a>
+</div>
+@if (Model.Count == 0)
+{
+    <div class="empty-area">You have not created any listings yet.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead><tr><th>Item</th><th>Category</th><th>Status</th><th>Updated</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var listing in Model)
+            {
+                <tr>
+                    <td>@listing.Title</td>
+                    <td>@listing.Category?.Name</td>
+                    <td>@listing.Status</td>
+                    <td>@listing.UpdatedAt.ToLocalTime().ToString("d")</td>
+                    <td class="text-end">
+                        <a asp-action="Details" asp-route-id="@listing.Id">View</a> |
+                        <a asp-action="Edit" asp-route-id="@listing.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@listing.Id" class="text-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,95 @@
+@model IReadOnlyList<Listing>
+@{
+    ViewData["Title"] = "Home";
+    var favouriteIds = ViewBag.FavouriteIds as HashSet<int> ?? new HashSet<int>();
+}
+
+<section class="home-hero">
+    <h1>Campus Marketplace</h1>
+    <p class="hero-subtitle">Buy, sell, swap and give away second-hand items with students on your campus.</p>
+    <a class="btn btn-dark" asp-controller="Listings" asp-action="Index">Browse items</a>
+</section>
+
+<section class="page-block" id="searchBlock">
+    <h2>Search recent items</h2>
+    <div class="simple-search">
+        <input type="text" id="searchInput" class="form-control"
+               placeholder="Search for an item, e.g. textbook, bike, desk" />
+        <button type="button" id="searchButton" class="btn btn-dark">Search</button>
+    </div>
+</section>
+
+<section class="page-block">
+    <h2>Categories</h2>
+    <div class="category-list" id="categoryList">
+        <button type="button" class="btn btn-dark category-btn" data-category="all">All</button>
+        <button type="button" class="btn btn-outline-secondary category-btn" data-category="textbooks">Textbooks</button>
+        <button type="button" class="btn btn-outline-secondary category-btn" data-category="electronics">Electronics</button>
+        <button type="button" class="btn btn-outline-secondary category-btn" data-category="furniture">Furniture</button>
+        <button type="button" class="btn btn-outline-secondary category-btn" data-category="clothing">Clothing</button>
+        <button type="button" class="btn btn-outline-secondary category-btn" data-category="other">Other</button>
+    </div>
+</section>
+
+<section class="page-block" id="popularItems">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Latest items</h2>
+        <a asp-controller="Listings" asp-action="Index">View all</a>
+    </div>
+    <p class="no-result-text" id="noResultText" hidden>No items match your search.</p>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty-area">
+            No listings have been posted yet.
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Listings" asp-action="Create">Create the first listing</a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="item-grid" id="itemGrid">
+            @foreach (var listing in Model)
+            {
+                var categoryClass = (listing.Category?.Name ?? "other").ToLowerInvariant();
+                <article class="item-card" data-category="@categoryClass" data-title="@listing.Title.ToLowerInvariant()">
+                    <div class="item-image image-@categoryClass">
+                        @if (listing.Photos.Count > 0)
+                        {
+                            <img src="@listing.Photos.First().ImageUrl" alt="@listing.Title" />
+                        }
+                        else
+                        {
+                            <span>@(listing.Category?.Name ?? "Other")</span>
+                        }
+                    </div>
+                    <div class="item-body">
+                        <span class="condition-badge condition-good">@listing.Condition</span>
+                        <h3>@listing.Title</h3>
+                        <p class="item-price">
+                            @(listing.ListingType == "Sale" && listing.Price.HasValue
+                                ? listing.Price.Value.ToString("C", CultureInfo.GetCultureInfo("en-NZ"))
+                                : listing.ListingType)
+                        </p>
+                        <p class="item-meta">@listing.PickupLocation · Posted @((DateTime.UtcNow - listing.CreatedAt).Days) day(s) ago</p>
+                        <div class="item-actions">
+                            <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.Id">View item</a>
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <form asp-controller="Favourites" asp-action="Toggle" method="post">
+                                    <input type="hidden" name="listingId" value="@listing.Id" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                    <button type="submit" class="fav-btn @(favouriteIds.Contains(listing.Id) ? "fav-active" : "")" aria-label="Save to favourites">
+                                        @(favouriteIds.Contains(listing.Id) ? "♥" : "♡")
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>

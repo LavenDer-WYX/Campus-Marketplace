@@ -1,0 +1,18 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+<section class="small-page">
+    <h1>Create student account</h1>
+    <form asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3"><label asp-for="Email" class="form-label">University email</label><input asp-for="Email" class="form-control" /><div class="form-text">Use your Massey University email address.</div><span asp-validation-for="Email" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="StudentId" class="form-label">Student ID</label><input asp-for="StudentId" class="form-control" /><span asp-validation-for="StudentId" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Nickname" class="form-label"></label><input asp-for="Nickname" class="form-control" /><span asp-validation-for="Nickname" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="PickupCampus" class="form-label">Campus / pickup area</label><input asp-for="PickupCampus" class="form-control" /><span asp-validation-for="PickupCampus" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" class="form-control" /><div class="form-text">At least 8 characters with uppercase, lowercase and a number.</div><span asp-validation-for="Password" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="ConfirmPassword" class="form-label">Confirm password</label><input asp-for="ConfirmPassword" class="form-control" /><span asp-validation-for="ConfirmPassword" class="text-danger"></span></div>
+        <button type="submit" class="btn btn-dark">Register</button>
+    </form>
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

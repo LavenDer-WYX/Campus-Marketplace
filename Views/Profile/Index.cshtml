@@ -1,0 +1,39 @@
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+<section>
+    <h1>My profile</h1>
+    <div class="profile-basic">
+        <div class="profile-photo">Photo</div>
+        <div>
+            <h2>@Model.User.Nickname</h2>
+            <p>@Model.User.Email</p>
+            <p>Student ID: @Model.User.StudentId</p>
+            <p>Pickup campus: @Model.User.PickupCampus</p>
+            <p>University verification: @(Model.User.IsSchoolVerified ? "Verified" : "Pending")</p>
+        </div>
+    </div>
+    <div class="page-block">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>My items</h2>
+            <a asp-controller="Listings" asp-action="Create" class="btn btn-dark">Create listing</a>
+        </div>
+        @if (Model.Listings.Count == 0)
+        {
+            <div class="empty-area">You have not posted any items yet.</div>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var listing in Model.Listings)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>@listing.Title — @listing.Status</span>
+                        <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.Id">View</a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</section>

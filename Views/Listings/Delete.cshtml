@@ -1,0 +1,12 @@
+@model Listing
+@{
+    ViewData["Title"] = "Delete listing";
+}
+<section class="small-page">
+    <h1>Delete listing</h1>
+    <p>Are you sure you want to delete <strong>@Model.Title</strong>?</p>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="MyListings" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</section>

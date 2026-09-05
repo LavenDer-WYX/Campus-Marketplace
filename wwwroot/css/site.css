@@ -1,0 +1,393 @@
+html {
+  font-size: 16px;
+}
+
+body {
+ margin: 0;
+ color: #222;
+ font-family: Arial, Helvetica, sans-serif;
+}
+
+/* 导航栏先保持最简单的样子 */
+.navbar {
+  min-height: 65px;
+}
+
+.navbar-brand {
+ font-weight: bold;
+}
+
+.page-content {
+  min-height: 75vh;
+  padding-top: 40px;
+   padding-bottom: 50px;
+}
+
+h1 {
+ margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+h3 {
+ font-size: 18px;
+}
+
+/* 首页上面的标题 */
+.home-title {
+  padding-bottom: 25px;
+ border-bottom: 1px solid #cccccc;
+}
+
+.home-title p {
+  margin-bottom: 0;
+}
+
+.page-block {
+ margin-top: 40px;
+}
+
+/* 搜索区域只有输入框和按钮 */
+.simple-search {
+ display: flex;
+ gap: 10px;
+ max-width: 700px;
+}
+
+.simple-search input {
+ flex: 1;
+}
+
+.category-list {
+   display: flex;
+   flex-wrap: wrap;
+ gap: 10px;
+}
+
+/* 商品卡片现在只是占位框 */
+.item-grid {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 20px;
+}
+
+.simple-item-card {
+ border: 1px solid #bbbbbb;
+ padding: 15px;
+}
+
+.image-box {
+  height: 150px;
+  border: 1px dashed #888888;
+  display: flex;
+ align-items: center;
+ justify-content: center;
+ margin-bottom: 15px;
+}
+
+.simple-item-card p {
+ margin-bottom: 8px;
+}
+
+/* 登录页面不需要占满整个屏幕 */
+.small-page {
+  max-width: 500px;
+}
+
+/* 商品详情页面的左右框架 */
+.details-layout {
+  display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 30px;
+}
+
+.details-image {
+ min-height: 350px;
+ border: 1px dashed #888888;
+ display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.listing-main-photo {
+ width: 100%;
+ height: 100%;
+ max-height: 500px;
+ object-fit: contain;
+}
+
+.details-information {
+ border: 1px solid #bbbbbb;
+ padding: 20px;
+}
+
+.text-placeholder {
+ min-height: 90px;
+ border: 1px dashed #aaaaaa;
+ padding: 10px;
+ margin-bottom: 20px;
+}
+
+/* 聊天页面只是分成左右两块 */
+.chat-layout {
+ display: grid;
+ grid-template-columns: 250px 1fr;
+ border: 1px solid #bbbbbb;
+ min-height: 450px;
+}
+
+.conversation-list {
+ padding: 15px;
+ border-right: 1px solid #bbbbbb;
+}
+
+.conversation-list button {
+ display: block;
+ width: 100%;
+  padding: 10px;
+ margin-bottom: 10px;
+ border: 1px solid #aaaaaa;
+}
+
+.message-area {
+ padding: 15px;
+ display: flex;
+ flex-direction: column;
+}
+
+.message-box {
+ flex: 1;
+ border: 1px dashed #aaaaaa;
+ padding: 15px;
+ margin-bottom: 15px;
+}
+
+.chat-message {
+ max-width: 75%;
+ padding: 10px 12px;
+ border-radius: 10px;
+ margin-bottom: 10px;
+}
+
+.chat-message small {
+ color: #666666;
+}
+
+.my-message {
+ margin-left: auto;
+ background: #dbeafe;
+}
+
+.other-message {
+ margin-right: auto;
+ background: #eeeeee;
+}
+
+.message-input {
+  display: flex;
+  gap: 10px;
+}
+
+/* 个人资料的基本框架 */
+.profile-basic {
+ display: flex;
+ gap: 20px;
+ align-items: center;
+ border: 1px solid #bbbbbb;
+ padding: 20px;
+}
+
+.profile-photo {
+ width: 120px;
+ height: 120px;
+ border: 1px dashed #888888;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.empty-area {
+ min-height: 180px;
+ border: 1px dashed #999999;
+ padding: 20px;
+}
+
+.simple-footer {
+ padding-top: 20px;
+ padding-bottom: 20px;
+ font-size: 14px;
+}
+
+/* 手机宽度下把左右结构改成上下结构 */
+@media (max-width: 768px) {
+ .page-content {
+   padding-top: 25px;
+ }
+
+  .simple-search {
+   flex-direction: column;
+  }
+
+ .item-grid {
+   grid-template-columns: 1fr;
+ }
+
+  .details-layout {
+    grid-template-columns: 1fr;
+  }
+
+ .details-image {
+   min-height: 220px;
+ }
+
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+
+ .conversation-list {
+   border-right: 0;
+   border-bottom: 1px solid #bbbbbb;
+ }
+
+  .profile-basic {
+   align-items: flex-start;
+   flex-direction: column;
+  }
+}
+
+/* ========== 首页商品流样式（Week 3-4, by Shuo Li） ========== */
+
+/* 顶部标题区域 */
+.home-hero {
+  padding: 30px 0 30px;
+  border-bottom: 1px solid #cccccc;
+}
+
+.hero-subtitle {
+  color: #555555;
+  max-width: 600px;
+}
+
+/* 商品卡片网格 */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.item-card {
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.item-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* 商品图片占位：每个分类一个颜色，以后换成真实图片 */
+.item-image {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.item-image img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+}
+
+.image-textbooks   { background: #4a6fa5; }
+.image-electronics { background: #5b8c5a; }
+.image-furniture   { background: #a2674a; }
+.image-clothing    { background: #7a5ba6; }
+.image-other       { background: #6c757d; }
+
+.item-body {
+  padding: 15px;
+}
+
+.item-body h3 {
+  font-size: 17px;
+  margin: 8px 0 6px;
+}
+
+.item-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1a7f37;
+  margin-bottom: 4px;
+}
+
+.item-meta {
+  font-size: 13px;
+  color: #777777;
+  margin-bottom: 10px;
+}
+
+.item-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-actions a {
+  font-size: 14px;
+}
+
+/* 收藏按钮：点击后变成实心红心（效果在 site.js） */
+.fav-btn {
+  border: none;
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+  color: #999999;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.fav-btn.fav-active {
+  color: #d6336c;
+}
+
+/* 成色标签 */
+.condition-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.condition-likenew { background: #d3f9d8; color: #2b8a3e; }
+.condition-good    { background: #fff3bf; color: #946800; }
+.condition-fair    { background: #ffe3e3; color: #c92a2a; }
+
+/* 没有搜索结果时的提示文字 */
+.no-result-text {
+  color: #777777;
+}
+
+/* 手机宽度下网格变两列/一列 */
+@media (max-width: 992px) {
+  .item-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .item-grid {
+    grid-template-columns: 1fr;
+  }
+}
