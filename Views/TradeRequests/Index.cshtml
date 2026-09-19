@@ -1,0 +1,48 @@
+@model IReadOnlyList<TradeRequest>
+@inject UserManager<AppUser> UserManager
+@{
+    ViewData["Title"] = "Trade requests";
+    var currentUserId = UserManager.GetUserId(User);
+}
+
+<h1>Trade requests</h1>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-area">There are no trade requests yet.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead><tr><th>Item</th><th>Type</th><th>Buyer</th><th>Status</th><th>Note</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var request in Model)
+            {
+                <tr>
+                    <td><a asp-controller="Listings" asp-action="Details" asp-route-id="@request.ListingId">@request.Listing?.Title</a></td>
+                    <td>@request.RequestType</td>
+                    <td>@request.Buyer?.Nickname</td>
+                    <td>@request.Status</td>
+                    <td>@request.Note</td>
+                    <td class="text-end">
+                        @if (request.SellerId == currentUserId && request.Status == "Pending")
+                        {
+                            <form asp-action="Accept" asp-route-id="@request.Id" method="post" class="d-inline"><button class="btn btn-sm btn-dark">Accept</button></form>
+                            <form asp-action="Reject" asp-route-id="@request.Id" method="post" class="d-inline"><button class="btn btn-sm btn-outline-danger">Reject</button></form>
+                        }
+                        @if (request.SellerId == currentUserId && request.Status == "Accepted")
+                        {
+                            <form asp-action="Complete" asp-route-id="@request.Id" method="post" class="d-inline"><button class="btn btn-sm btn-success">Complete</button></form>
+                        }
+                        @if (request.BuyerId == currentUserId && request.Status == "Pending")
+                        {
+                            <form asp-action="Cancel" asp-route-id="@request.Id" method="post" class="d-inline"><button class="btn btn-sm btn-outline-secondary">Cancel</button></form>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

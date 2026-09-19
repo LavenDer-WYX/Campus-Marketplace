@@ -1,0 +1,24 @@
+@model Listing
+@{
+    ViewData["Title"] = "Edit listing";
+}
+<section class="small-page">
+    <h1>Edit listing</h1>
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+        <partial name="_ListingForm" model="Model" />
+        <div class="mb-3">
+            <label asp-for="Status" class="form-label"></label>
+            <select asp-for="Status" class="form-select">
+                <option>Available</option>
+                <option>Reserved</option>
+                <option>Sold</option>
+                <option>Swapped</option>
+                <option>Given away</option>
+                <option>Unavailable</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-dark">Save changes</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</section>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

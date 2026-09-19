@@ -1,0 +1,5 @@
+@* Model 是 NotificationCountViewComponent 查询到的未读数量。 *@
+@model int
+<a class="nav-link" asp-controller="Notifications" asp-action="Index">
+    Notifications <span class="badge bg-dark" aria-label="Unread notifications">@Model</span>
+</a>

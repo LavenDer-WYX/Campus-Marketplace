@@ -1,0 +1,40 @@
+@* 这是商品表单的一部分，外层 Create/Edit 已经有 form，这里不能再放第二个 form。 *@
+<section id="listing-assistant" class="border rounded p-3 mb-4"
+         data-generate-url="@Url.Action("Generate", "ListingAssistant")"
+         data-price-url="@Url.Action("Price", "ListingAssistant")">
+    <h2 class="h5">Listing help</h2>
+    <p class="small text-muted">Fill in the title, category and condition above first. You can always write your own description and price.</p>
+
+    @* 下面两个输入框故意没有 name，因此普通“发布商品”不会把它们当成商品字段保存。 *@
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="assistant-age" class="form-label">How long has it been used? (optional)</label>
+            <input id="assistant-age" type="text" maxlength="80" class="form-control" placeholder="For example, one year" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="assistant-accessories" class="form-label">Included accessories (optional)</label>
+            <input id="assistant-accessories" type="text" maxlength="300" class="form-control" placeholder="For example, charger and original box" />
+        </div>
+    </div>
+    <p class="small text-muted">Generate AI draft sends only these item details to the configured AI provider. Do not enter contact details or other personal information. Check the draft before using it.</p>
+    @* type=button 很重要：点击助手不会顺便提交整个商品表单。 *@
+    <button type="button" id="assistant-generate" class="btn btn-outline-secondary">Generate AI draft</button>
+    <p id="assistant-description-status" class="small mt-2 mb-2" role="status" aria-live="polite"></p>
+
+    @* AI 返回的文本先放到只读草稿框；用户再次点击才会替换商品描述。 *@
+    <div id="assistant-draft-area" hidden>
+        <label for="assistant-draft" class="form-label">Draft to review</label>
+        <textarea id="assistant-draft" class="form-control mb-2" rows="5" readonly></textarea>
+        <button type="button" id="assistant-use-draft" class="btn btn-outline-primary">Use this draft (replace description)</button>
+    </div>
+
+    <hr />
+    <h3 class="h6">Database price reference</h3>
+    <p class="small text-muted">For sale listings only. This uses other listings' asking prices in this database. It does not use AI or confirmed sale prices.</p>
+    <button type="button" id="assistant-price" class="btn btn-outline-secondary">Check price reference</button>
+    <p id="assistant-price-status" class="small mt-2 mb-2" role="status" aria-live="polite"></p>
+    @* 同样需要用户明确点击，价格参考不会自动覆盖原有价格。 *@
+    <button type="button" id="assistant-use-price" class="btn btn-outline-primary" hidden>Use suggested price</button>
+</section>
+@* defer 表示等 HTML 读取完后再绑定按钮；asp-append-version 避免浏览器缓存旧脚本。 *@
+<script src="~/js/listing-assistant.js" asp-append-version="true" defer></script>

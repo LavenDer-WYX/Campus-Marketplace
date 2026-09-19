@@ -1,0 +1,28 @@
+@* 这个页面收到 AdminController.Index 准备的五个统计数字。 *@
+@model AdminDashboardViewModel
+@{
+    // 页面标题会被共享布局放进浏览器标签页。
+    ViewData["Title"] = "Admin dashboard";
+}
+
+<h1>Admin dashboard</h1>
+<p>Review platform activity and reported items.</p>
+
+@* 表格只显示统计数量，不把用户密码或私人聊天内容暴露在后台首页。 *@
+<table class="table table-bordered">
+    <caption>Current platform totals</caption>
+    <thead>
+        <tr><th scope="col">Statistic</th><th scope="col">Count</th></tr>
+    </thead>
+    <tbody>
+        @* Razor 的 @Model.属性名 会把 Controller 查到的数字显示在 HTML 中。 *@
+        <tr><th scope="row">Registered users</th><td>@Model.UserCount</td></tr>
+        <tr><th scope="row">All listings</th><td>@Model.ListingCount</td></tr>
+        <tr><th scope="row">Available listings</th><td>@Model.AvailableListingCount</td></tr>
+        <tr><th scope="row">Completed trades</th><td>@Model.CompletedTradeCount</td></tr>
+        <tr><th scope="row">Pending reports</th><td>@Model.PendingReportCount</td></tr>
+    </tbody>
+</table>
+
+@* Tag Helper 会把控制器名和方法名转换成 /Admin/Reports 链接。 *@
+<a class="btn btn-primary" asp-controller="Admin" asp-action="Reports">Review reports</a>

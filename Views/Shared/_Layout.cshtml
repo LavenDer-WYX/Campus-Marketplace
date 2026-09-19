@@ -1,0 +1,78 @@
+@* 共享外壳：每个页面复用导航、样式和底部脚本。 *@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Campus Marketplace</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light border-bottom">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Campus Marketplace</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainMenu" aria-controls="mainMenu"
+                        aria-expanded="false" aria-label="Open menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainMenu">
+                    <ul class="navbar-nav ms-auto align-items-md-center">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Listings" asp-action="Index">Items</a></li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Listings" asp-action="Create">Sell an item</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Listings" asp-action="MyListings">My listings</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Favourites" asp-action="Index">Favourites</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Messages" asp-action="Index">Messages</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="TradeRequests" asp-action="Index">Trades</a></li>
+                            @* ViewComponent 查询本人的未读数量，不让每个 Controller 重复查询。 *@
+                            <li class="nav-item">@await Component.InvokeAsync("NotificationCount")</li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Reports" asp-action="Index">My reports</a></li>
+                            @* 隐藏链接只是界面效果，真正的权限由 AdminController 的 Authorize 保证。 *@
+                            @if (User.IsInRole(UserRoles.Admin))
+                            {
+                                <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Index">Admin</a></li>
+                            }
+                            <li class="nav-item"><a class="nav-link" asp-controller="Profile" asp-action="Index">Profile</a></li>
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="nav-link btn btn-link">Logout</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register">Register</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Login</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container page-content">
+        @if (TempData["Message"] is string message)
+        {
+            <div class="alert alert-info">@message</div>
+        }
+        @* 把当前 Controller 返回的具体页面放在这里。 *@
+        @RenderBody()
+    </main>
+
+    <footer class="border-top simple-footer">
+        <div class="container">Campus Marketplace - Week 8 backend</div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

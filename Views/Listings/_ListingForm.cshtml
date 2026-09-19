@@ -1,0 +1,66 @@
+@model Listing
+@* 新增助手只提供建议；点击采用后才会填入描述或价格，不会直接发布商品。 *@
+<partial name="_ListingAssistant" />
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="mb-3">
+    <label asp-for="Title" class="form-label"></label>
+    <input asp-for="Title" class="form-control" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="CategoryId" class="form-label">Category</label>
+    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+        <option value="">Choose a category</option>
+    </select>
+    <span asp-validation-for="CategoryId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label asp-for="ListingType" class="form-label">Listing type</label>
+        <select asp-for="ListingType" class="form-select">
+            <option>Sale</option>
+            <option>Swap</option>
+            <option>Giveaway</option>
+        </select>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" placeholder="Optional for swap/giveaway" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="Condition" class="form-label"></label>
+        <select asp-for="Condition" class="form-select">
+            <option value="">Choose condition</option>
+            <option>Like new</option>
+            <option>Good</option>
+            <option>Fair</option>
+            <option>Poor</option>
+        </select>
+        <span asp-validation-for="Condition" class="text-danger"></span>
+    </div>
+</div>
+<div class="mb-3">
+    <label asp-for="PickupLocation" class="form-label">Pickup location</label>
+    <input asp-for="PickupLocation" class="form-control" />
+    <span asp-validation-for="PickupLocation" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label for="photos" class="form-label">Photos</label>
+    <input id="photos" name="photos" type="file" class="form-control"
+           accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple />
+    <div class="form-text">Up to 5 images. Each image must be smaller than 5 MB.</div>
+    @if (ViewData.ModelState["photos"]?.Errors.Count > 0)
+    {
+        <div class="text-danger">@ViewData.ModelState["photos"]!.Errors[0].ErrorMessage</div>
+    }
+</div>
+<div class="form-check mb-3">
+    <input asp-for="IsAvailable" class="form-check-input" />
+    <label asp-for="IsAvailable" class="form-check-label">Available now</label>
+</div>

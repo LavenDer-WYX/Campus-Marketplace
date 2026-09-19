@@ -1,0 +1,91 @@
+@* 这里同时需要举报详情和管理员处理表单，所以使用一个专门的 ViewModel。 *@
+@model AdminReportActionViewModel
+@{
+    // 设置页面标题。
+    ViewData["Title"] = "Report details";
+    // Controller 在显示这个页面前会从数据库填好 Report。
+    var report = Model.Report;
+}
+
+<h1>Report details</h1>
+@* 如果缺少详情就显示提示，不尝试读取空对象的属性。 *@
+@if (report == null)
+{
+    <p>The report could not be loaded.</p>
+}
+else
+{
+    @* dl、dt、dd 用来表示一组“名称：内容”的信息。 *@
+    <dl class="row">
+        <dt class="col-sm-3">Item at time of report</dt>
+        <dd class="col-sm-9">@report.ListingTitle</dd>
+        <dt class="col-sm-3">Reported by</dt>
+        <dd class="col-sm-9">@(report.Reporter?.Nickname ?? "Student")</dd>
+        <dt class="col-sm-3">Submitted (UTC)</dt>
+        <dd class="col-sm-9">@report.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">@report.Status</dd>
+        <dt class="col-sm-3">Reason</dt>
+        @* pre-wrap 保留用户输入的换行；不用 Html.Raw，避免把输入当作脚本执行。 *@
+        <dd class="col-sm-9" style="white-space: pre-wrap; overflow-wrap: anywhere;">@report.Reason</dd>
+    </dl>
+
+    @* 即使商品删除，仍可查看上面的举报原因和标题快照。 *@
+    @if (report.Listing == null)
+    {
+        <p class="alert alert-secondary">This item has been deleted. The report history is still available.</p>
+    }
+    else
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class="h5">Current item information</h2>
+                <p><strong>Title:</strong> @report.Listing.Title</p>
+                <p><strong>Status:</strong> @report.Listing.Status</p>
+                <p><strong>Hidden by admin:</strong> @(report.Listing.IsHidden ? "Yes" : "No")</p>
+                <p style="white-space: pre-wrap; overflow-wrap: anywhere;">@report.Listing.Description</p>
+                <a asp-controller="Listings" asp-action="Details" asp-route-id="@report.Listing.Id">Open item</a>
+            </div>
+        </div>
+    }
+
+    @* 只有待处理举报显示操作表单；Controller 还会再次检查状态和权限。 *@
+    @if (report.Status == "Pending")
+    {
+        @* 表单使用 POST；Form Tag Helper 会自动生成防伪令牌。 *@
+        <form asp-controller="Admin" asp-action="Dismiss" method="post">
+            @* 隐藏输入框负责把举报编号传回后端，它不代替后端的权限检查。 *@
+            <input asp-for="Id" type="hidden" />
+            @* 后端发现商品删除或输入错误时，会在这里显示错误。 *@
+            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+            <div class="mb-3">
+                <label asp-for="AdminNote" class="form-label">Review note</label>
+                <textarea asp-for="AdminNote" class="form-control" rows="4" maxlength="1000"></textarea>
+                <span asp-validation-for="AdminNote" class="text-danger"></span>
+                <div class="form-text">Required when hiding an item. The reporter can read this note. Maximum 1000 characters.</div>
+            </div>
+            @* 默认按钮提交给 Dismiss：关闭举报并保留商品当前状态。 *@
+            <button class="btn btn-outline-secondary" type="submit">Close without hiding</button>
+            @* 同一个表单可以使用另一个按钮的目标地址提交给 HideListing。 *@
+            @if (report.Listing != null)
+            {
+                <button class="btn btn-danger" type="submit" asp-action="HideListing">Hide item and resolve report</button>
+            }
+        </form>
+    }
+    else
+    {
+        @* 已处理的举报只显示结果，不能在这里覆盖原来的处理历史。 *@
+        <h2 class="h5">Review result</h2>
+        <p>Reviewed (UTC): @report.ResolvedAt?.ToString("yyyy-MM-dd HH:mm")</p>
+        <p style="white-space: pre-wrap; overflow-wrap: anywhere;">@(report.AdminNote ?? "No additional note.")</p>
+    }
+}
+
+@* 返回待处理列表继续处理其他举报。 *@
+<p class="mt-3"><a asp-action="Reports">Back to reports</a></p>
+
+@section Scripts {
+    @* 加载现有 jQuery 表单验证；后端仍会独立执行相同的数据检查。 *@
+    <partial name="_ValidationScriptsPartial" />
+}

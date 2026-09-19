@@ -1,0 +1,69 @@
+@model IReadOnlyList<Listing>
+@{
+    ViewData["Title"] = "Browse items";
+    var favouriteIds = ViewBag.FavouriteIds as HashSet<int> ?? new HashSet<int>();
+}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Browse items</h1>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <a asp-action="Create" class="btn btn-dark">Create listing</a>
+    }
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-4"><input name="search" value="@ViewData["Search"]" class="form-control" placeholder="Search title or description" /></div>
+    <div class="col-md-3"><select name="categoryId" asp-items="ViewBag.Categories" class="form-select"><option value="">All categories</option></select></div>
+    <div class="col-md-2"><select name="condition" class="form-select"><option value="">Any condition</option><option>Like new</option><option>Good</option><option>Fair</option><option>Poor</option></select></div>
+    <div class="col-md-2"><select name="listingType" class="form-select"><option value="">Any type</option><option>Sale</option><option>Swap</option><option>Giveaway</option></select></div>
+    <div class="col-md-1"><button class="btn btn-dark w-100" type="submit">Go</button></div>
+</form>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-area">No listings match the selected filters.</div>
+}
+else
+{
+    <div class="item-grid">
+        @foreach (var listing in Model)
+        {
+            var categoryClass = (listing.Category?.Name ?? "other").ToLowerInvariant();
+            <article class="item-card">
+                <div class="item-image image-@categoryClass">
+                    @if (listing.Photos.Count > 0)
+                    {
+                        <img src="@listing.Photos.First().ImageUrl" alt="@listing.Title" />
+                    }
+                    else
+                    {
+                        <span>@(listing.Category?.Name ?? "Other")</span>
+                    }
+                </div>
+                <div class="item-body">
+                    <span class="condition-badge condition-good">@listing.Condition</span>
+                    <h3>@listing.Title</h3>
+                    <p class="item-price">
+                        @(listing.ListingType == "Sale" && listing.Price.HasValue
+                            ? listing.Price.Value.ToString("C", CultureInfo.GetCultureInfo("en-NZ"))
+                            : listing.ListingType)
+                    </p>
+                    <p class="item-meta">@listing.PickupLocation · @listing.ListingType</p>
+                    <div class="item-actions">
+                        <a asp-action="Details" asp-route-id="@listing.Id">View item</a>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <form asp-controller="Favourites" asp-action="Toggle" method="post">
+                                <input type="hidden" name="listingId" value="@listing.Id" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <button type="submit" class="fav-btn @(favouriteIds.Contains(listing.Id) ? "fav-active" : "")" aria-label="Save to favourites">
+                                    @(favouriteIds.Contains(listing.Id) ? "♥" : "♡")
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+}

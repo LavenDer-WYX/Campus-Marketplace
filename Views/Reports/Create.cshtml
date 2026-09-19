@@ -1,0 +1,33 @@
+@* 页面只需要商品编号、标题和举报原因，不直接接收整个数据库实体。 *@
+@model ReportCreateViewModel
+@{
+    // 设置显示在浏览器标签页中的标题。
+    ViewData["Title"] = "Report an item";
+}
+
+<h1>Report an item</h1>
+@* 标题来自后端查询结果；Razor 自动进行 HTML 编码。 *@
+<p>Item: <strong>@Model.ListingTitle</strong></p>
+<p>Explain the problem so an administrator can review it.</p>
+
+@* POST 提交表单；Tag Helper 自动附带防伪令牌供 Controller 检查。 *@
+<form asp-controller="Reports" asp-action="Create" method="post">
+    @* 商品编号传回服务器，后端仍会重新查询并检查商品。 *@
+    <input asp-for="ListingId" type="hidden" />
+    @* 显示重复举报等不是单个字段导致的错误。 *@
+    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+    <div class="mb-3">
+        <label asp-for="Reason" class="form-label">Reason</label>
+        @* asp-for 会生成输入名称及验证属性，MVC 据此把内容放进 ViewModel。 *@
+        <textarea asp-for="Reason" class="form-control" rows="5" maxlength="1000"></textarea>
+        <span asp-validation-for="Reason" class="text-danger"></span>
+        <div class="form-text">Maximum 1000 characters. Do not include passwords or other sensitive information.</div>
+    </div>
+    <button class="btn btn-primary" type="submit">Submit report</button>
+    <a class="btn btn-outline-secondary" asp-controller="Listings" asp-action="Details" asp-route-id="@Model.ListingId">Cancel</a>
+</form>
+
+@section Scripts {
+    @* 使用现有客户端验证，方便用户在提交前看到必填和长度错误。 *@
+    <partial name="_ValidationScriptsPartial" />
+}

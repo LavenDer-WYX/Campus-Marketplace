@@ -1,0 +1,42 @@
+@* 控制器只传入当前用户的通知，页面不自行选择其他用户。 *@
+@model IReadOnlyList<Notification>
+@{
+    ViewData["Title"] = "Notifications";
+    int page = ViewBag.Page;
+}
+<h1>Notifications</h1>
+@* POST 表单自动生成防伪令牌，与控制器校验配合。 *@
+<form asp-action="MarkAllAsRead" method="post" class="mb-3">
+    <button class="btn btn-outline-dark" type="submit">Mark all as read</button>
+</form>
+@if (Model.Count == 0)
+{
+    <p>No notifications on this page.</p>
+}
+@foreach (var notification in Model)
+{
+    <article class="border rounded p-3 mb-3">
+        <p class="mb-1">@notification.Content</p>
+        <small>@notification.CreatedAt.ToLocalTime().ToString("g") · @(notification.IsRead ? "Read" : "Unread")</small>
+        @* 只输出本站链接，避免被错误数据引导到外站。 *@
+        @if (notification.RelatedUrl is not null && Url.IsLocalUrl(notification.RelatedUrl))
+        {
+            <a href="@notification.RelatedUrl" class="ms-2">View details</a>
+        }
+        @if (!notification.IsRead)
+        {
+            <form asp-action="MarkAsRead" method="post" class="mt-2">
+                <input type="hidden" name="id" value="@notification.Id" />
+                <button class="btn btn-sm btn-dark" type="submit">Mark as read</button>
+            </form>
+        }
+    </article>
+}
+@if (page > 1)
+{
+    <a asp-action="Index" asp-route-page="@(page - 1)" class="btn btn-outline-dark">Previous</a>
+}
+@if (ViewBag.HasNext == true)
+{
+    <a asp-action="Index" asp-route-page="@(page + 1)" class="btn btn-outline-dark">Next</a>
+}
