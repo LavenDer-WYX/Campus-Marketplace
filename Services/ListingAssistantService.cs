@@ -41,8 +41,10 @@ public class ListingAssistantService
         string? apiKey = _configuration["ListingAssistant:ApiKey"];
         // 模型由组员配置自己的可用模型，代码不擅自选择付费模型。
         string? model = _configuration["ListingAssistant:Model"];
-        // 默认采用 Chat Completions 的 HTTPS 地址，也允许配置兼容服务地址。
-        string endpoint = _configuration["ListingAssistant:Endpoint"] ?? "https://api.openai.com/v1/chat/completions";
+        // 默认连接火山方舟的豆包 Chat Completions 接口。
+        // 仍然从配置中读取地址，之后如果团队更换服务商，不需要重写 Controller。
+        string endpoint = _configuration["ListingAssistant:Endpoint"] ??
+            "https://ark.cn-beijing.volces.com/api/v3/chat/completions";
 
         // Key 或模型未设置时直接结束；这一步不会向外部发出请求，也不会产生 API 费用。
         if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(model))
@@ -83,8 +85,11 @@ public class ListingAssistantService
             },
             // 限制一次回答的最大 token 数，避免生成过长内容。
             max_completion_tokens = 500,
-            // 不要求服务商把本次内容保留为可再次查询的 Chat Completion。
-            store = false
+            // 商品描述不需要复杂推理。关闭深度思考可以让返回更快，也能减少 token 消耗。
+            thinking = new
+            {
+                type = "disabled"
+            }
         };
 
         // linked token 同时响应浏览器取消和本方法的 20 秒超时。

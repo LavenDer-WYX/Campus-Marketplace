@@ -44,18 +44,17 @@ Controller 不直接保存数据文件，View 也不直接查询数据库。DbCo
 
 `ListingAssistant` 有三项配置：
 
-- `Endpoint`：与 Chat Completions 兼容的 HTTPS 地址。
-- `Model`：团队选择并可访问的模型名称。
+- `Endpoint`：豆包所在的火山方舟 Chat Completions HTTPS 地址。
+- `Model`：项目默认使用价格较低的 `doubao-seed-2-0-lite-260428`。如果账户使用其他模型，可以用 User Secrets 覆盖；自定义推理接入点则填写 `ep-` 开头的 Endpoint ID。
 - `ApiKey`：必须保持为空，不要把真实密钥提交到 GitHub。
 
 开发机配置示例：
 
 ```powershell
-dotnet user-secrets set "ListingAssistant:ApiKey" "你的密钥"
-dotnet user-secrets set "ListingAssistant:Model" "你确认可用的模型名"
+dotnet user-secrets set "ListingAssistant:ApiKey" "你的火山方舟API Key"
 ```
 
-没有配置密钥或模型时，AI 描述按钮返回明确提示，不会发送外部请求；本地数据库价格参考仍然能运行。
+如果账户使用的不是默认模型，再执行 `dotnet user-secrets set "ListingAssistant:Model" "控制台中显示的Model ID或Endpoint ID"`。请求体将 `thinking` 设为 `disabled`，因为商品描述不需要深度思考，这样返回更快并减少 token 消耗。没有配置密钥时，AI 描述按钮返回明确提示，不会发送外部请求；本地数据库价格参考仍然能运行。
 
 ## Models 与数据库表
 

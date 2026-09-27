@@ -177,7 +177,6 @@ public class AdminController : Controller
             model.Report = report;
             return View("Details", model);
         }
-
         // 没有填写说明时保存 null；有说明时去掉首尾空白。
         report.AdminNote = model.AdminNote?.Trim();
         // 记录谁处理了举报。

@@ -28,7 +28,6 @@ public class FavouritesController : Controller
             .Where(x => x.UserId == userId && x.Listing != null && !x.Listing.IsHidden) // 只显示自己的收藏，隐藏违规商品。
             .OrderByDescending(x => x.CreatedAt) // 最新收藏排在前面。
             .ToListAsync(); // 执行 SQL 并转换为列表。
-
         return View(favourites); // 把列表交给 Views/Favourites/Index.cshtml。
     }
 
@@ -41,7 +40,6 @@ public class FavouritesController : Controller
         {
             return Challenge(); // 没有有效身份就要求登录。
         }
-
         var listing = await _db.Listings.FindAsync(listingId); // 先确认商品存在。
         if (listing == null)
         {

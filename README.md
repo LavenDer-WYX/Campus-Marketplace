@@ -57,16 +57,17 @@ dotnet run -- --make-admin registered-email@massey.ac.nz
 
 Log out and sign in again before opening `/Admin`.
 
-## Optional AI configuration
+## Optional Doubao AI configuration
 
-Do not commit an API key. Store local development values with User Secrets:
+The listing-writing assistant uses the Volcengine Ark Chat Completions API. First create an Ark API key and enable a Doubao model. Do not commit the key. Store local development values with User Secrets:
 
 ```powershell
-dotnet user-secrets set "ListingAssistant:ApiKey" "your-key"
-dotnet user-secrets set "ListingAssistant:Model" "a-model-you-can-access"
+dotnet user-secrets set "ListingAssistant:ApiKey" "your-ark-api-key"
 ```
 
-Without both values the AI description endpoint stays disabled and makes no external request. The database price reference still works.
+The committed configuration uses `doubao-seed-2-0-lite-260428` and the Beijing Ark endpoint. If your Ark account uses a different enabled Model ID or a custom `ep-...` endpoint ID, override it locally with `dotnet user-secrets set "ListingAssistant:Model" "your-model-or-endpoint-id"`.
+
+Without an API key the AI description endpoint stays disabled and makes no external request. The database price reference still works.
 
 ## Backend notes
 
