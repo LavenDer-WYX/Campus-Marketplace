@@ -10,8 +10,8 @@ using WebApplication1.Data;
 
 namespace WebApplication1.Migrations
 {
-    // EF Core 自动维护的“当前数据库结构快照”，用于比较并生成下一次 Migration。
-    // 不需要逐行学习或手动编辑；业务规则应写在 Models 和 ApplicationDbContext。
+
+
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {

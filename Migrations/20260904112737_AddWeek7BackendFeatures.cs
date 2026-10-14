@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication1.Migrations
 {
-    // EF Core 自动生成：加入收藏、聊天、消息和交易请求表。
+
     public partial class AddWeek7BackendFeatures : Migration
     {
-        // Up 创建 Week 7 后端表、外键和查询索引。
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -184,7 +184,7 @@ namespace WebApplication1.Migrations
                 column: "SellerId");
         }
 
-        // Down 按依赖关系删除本次新增的表。
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

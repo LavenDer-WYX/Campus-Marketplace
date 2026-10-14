@@ -15,7 +15,7 @@ This folder combines the three team prototypes into one ASP.NET Core MVC applica
 - Automatic Student role assignment and Student/Admin role creation
 - SQL Server EF Core schema and migrations
 - Database-backed home feed
-- Listing search and category/condition/type filtering
+- Listing search with keyword, category, condition, type, price, location and date filtering
 - Create, view, edit, delete and manage personal listings
 - Profile page showing the signed-in student's details and listings
 - Persistent favourites and a personal favourites page
@@ -28,7 +28,8 @@ This folder combines the three team prototypes into one ASP.NET Core MVC applica
 - Admin-only dashboard, report review and listing moderation
 - In-app notifications for messages, trades and report decisions
 - AI description draft integration with safe configuration and request limits
-- Database-based asking-price reference for listing creation
+- AI Smart Search that converts natural-language requests into validated database filters
+- AI price suggestion using item facts and anonymous local asking-price statistics
 
 ## Requirements
 
@@ -59,7 +60,7 @@ Log out and sign in again before opening `/Admin`.
 
 ## Optional Doubao AI configuration
 
-The listing-writing assistant uses the Volcengine Ark Chat Completions API. First create an Ark API key and enable a Doubao model. Do not commit the key. Store local development values with User Secrets:
+The listing-writing assistant, AI price suggestion and AI Smart Search use the Volcengine Ark Chat Completions API. First create an Ark API key and enable a Doubao model. Do not commit the key. Store local development values with User Secrets:
 
 ```powershell
 dotnet user-secrets set "ListingAssistant:ApiKey" "your-ark-api-key"
@@ -67,7 +68,7 @@ dotnet user-secrets set "ListingAssistant:ApiKey" "your-ark-api-key"
 
 The committed configuration uses `doubao-seed-2-0-lite-260428` and the Beijing Ark endpoint. If your Ark account uses a different enabled Model ID or a custom `ep-...` endpoint ID, override it locally with `dotnet user-secrets set "ListingAssistant:Model" "your-model-or-endpoint-id"`.
 
-Without an API key the AI description endpoint stays disabled and makes no external request. The database price reference still works.
+Without an API key the AI description and price endpoints stay disabled, while Smart Search falls back to the normal keyword search. Users can always enter their own description and price.
 
 ## Backend notes
 

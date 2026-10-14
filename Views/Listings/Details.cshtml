@@ -3,7 +3,7 @@
     ViewData["Title"] = Model.Title;
 }
 <section>
-    @* 管理员隐藏的商品只让主人和管理员看到说明。 *@
+
     @if (Model.IsHidden)
     {
         <p class="alert alert-warning">This listing has been hidden by an administrator. It cannot receive new enquiries or trade requests.</p>
@@ -54,7 +54,7 @@
                     </form>
                 </div>
 
-                @* 先打开举报表单，实际保存仍通过 POST 防伪校验。 *@
+
                 <p><a asp-controller="Reports" asp-action="Create" asp-route-listingId="@Model.Id">Report this listing</a></p>
 
                 @if (Model.ListingType != "Sale" && ViewBag.HasPendingRequest == true)
@@ -65,7 +65,7 @@
                 {
                     @if (Model.ListingType == "Sale")
                     {
-                        @* Sale 商品直接进入 Accepted，卖家不需要再次确认。 *@
+
                         <form asp-controller="TradeRequests" asp-action="BuyNow" method="post">
                             <input type="hidden" name="listingId" value="@Model.Id" />
                             <label for="buyNote" class="form-label">Pickup note to seller (optional)</label>
@@ -76,7 +76,7 @@
                     }
                     else
                     {
-                        @* Swap 和 Giveaway 不是普通购买，仍然需要卖家接受请求。 *@
+
                         <form asp-controller="TradeRequests" asp-action="Create" method="post">
                             <input type="hidden" name="listingId" value="@Model.Id" />
                             <label for="tradeNote" class="form-label">Message to seller (optional)</label>

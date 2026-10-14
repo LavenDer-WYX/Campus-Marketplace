@@ -1,4 +1,4 @@
-// ========== 首页前端筛选（Week 3-4, by Shuo Li） ==========
+
 
 document.addEventListener("DOMContentLoaded", function () {
   var searchInput = document.getElementById("searchInput");
@@ -7,14 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
   var itemCards = document.querySelectorAll(".item-card");
   var noResultText = document.getElementById("noResultText");
 
-  // 首页之外的页面没有这些元素，直接退出
+
   if (!searchInput || itemCards.length === 0) {
     return;
   }
 
   var activeCategory = "all";
 
-  // 按当前关键词 + 分类刷新商品显示
+
   function applyFilters() {
     var keyword = searchInput.value.trim().toLowerCase();
     var visibleCount = 0;
@@ -33,13 +33,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // 一个结果都没有时显示提示文字
+
     if (noResultText) {
       noResultText.hidden = visibleCount !== 0;
     }
   }
 
-  // 搜索：点击按钮或按回车都会触发
+
   searchButton.addEventListener("click", applyFilters);
   searchInput.addEventListener("input", applyFilters);
   searchInput.addEventListener("keydown", function (event) {
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // 分类按钮：高亮选中的那个，再刷新列表
+
   categoryButtons.forEach(function (button) {
     button.addEventListener("click", function () {
       activeCategory = button.dataset.category;

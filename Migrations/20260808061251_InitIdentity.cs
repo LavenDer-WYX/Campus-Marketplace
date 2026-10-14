@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication1.Migrations
 {
-    // EF Core 自动生成：第一次建立 Identity 用户、角色、登录和令牌表。
-    // 业务代码通常不要手改已经使用过的旧 Migration。
+
+
     public partial class InitIdentity : Migration
     {
-        // Up 从空数据库创建 AspNetUsers、AspNetRoles 等账号基础结构。
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -201,7 +201,7 @@ namespace WebApplication1.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
         }
 
-        // Down 只在主动回退时按相反顺序删除这些表。
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

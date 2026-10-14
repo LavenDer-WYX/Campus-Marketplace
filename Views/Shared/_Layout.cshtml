@@ -1,4 +1,4 @@
-@* 共享外壳：每个页面复用导航、样式和底部脚本。 *@
+
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<AppUser> SignInManager
 <!DOCTYPE html>
@@ -31,10 +31,10 @@
                             <li class="nav-item"><a class="nav-link" asp-controller="Favourites" asp-action="Index">Favourites</a></li>
                             <li class="nav-item"><a class="nav-link" asp-controller="Messages" asp-action="Index">Messages</a></li>
                             <li class="nav-item"><a class="nav-link" asp-controller="TradeRequests" asp-action="Index">Trades</a></li>
-                            @* ViewComponent 查询本人的未读数量，不让每个 Controller 重复查询。 *@
+
                             <li class="nav-item">@await Component.InvokeAsync("NotificationCount")</li>
                             <li class="nav-item"><a class="nav-link" asp-controller="Reports" asp-action="Index">My reports</a></li>
-                            @* 隐藏链接只是界面效果，真正的权限由 AdminController 的 Authorize 保证。 *@
+
                             @if (User.IsInRole(UserRoles.Admin))
                             {
                                 <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Index">Admin</a></li>
@@ -62,7 +62,7 @@
         {
             <div class="alert alert-info">@message</div>
         }
-        @* 把当前 Controller 返回的具体页面放在这里。 *@
+
         @RenderBody()
     </main>
 

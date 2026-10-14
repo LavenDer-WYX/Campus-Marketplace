@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication1.Migrations
 {
-    // EF Core 自动生成：加入商品分类、商品和商品照片，并调整学生资料字段。
+
     public partial class Week7MarketplaceIntegration : Migration
     {
-        // Up 保存 Week 7 商品结构和五个初始分类。
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
@@ -156,7 +156,7 @@ namespace WebApplication1.Migrations
                 column: "SellerId");
         }
 
-        // Down 用于开发环境回退该次结构变化。
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

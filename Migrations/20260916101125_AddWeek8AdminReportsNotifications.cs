@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication1.Migrations
 {
-    // 这是 EF Core 根据 Models 和 ApplicationDbContext 自动生成的 Week 8 数据库升级步骤。
-    // Up 负责升级；Down 只在开发者主动回退 Migration 时使用。
+
+
     public partial class AddWeek8AdminReportsNotifications : Migration
     {
-        // 将旧 Week 7 数据库升级到 Week 8，已有用户和商品不会被清空。
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // 给 Listings 增加管理员隐藏标记；旧商品默认 false，所以继续正常显示。
+
             migrationBuilder.AddColumn<bool>(
                 name: "IsHidden",
                 table: "Listings",
@@ -20,7 +20,7 @@ namespace WebApplication1.Migrations
                 nullable: false,
                 defaultValue: false);
 
-            // 创建站内通知表，UserId 外键指向 AspNetUsers。
+
             migrationBuilder.CreateTable(
                 name: "Notifications",
                 columns: table => new
@@ -45,7 +45,7 @@ namespace WebApplication1.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            // 创建举报表。ListingId 可空，使商品删除后仍保留举报历史。
+
             migrationBuilder.CreateTable(
                 name: "Reports",
                 columns: table => new
@@ -85,13 +85,13 @@ namespace WebApplication1.Migrations
                         onDelete: ReferentialAction.SetNull);
                 });
 
-            // 下面的索引用于加速未读通知、举报筛选和关联查询。
+
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId_IsRead_CreatedAt",
                 table: "Notifications",
                 columns: new[] { "UserId", "IsRead", "CreatedAt" });
 
-            // 筛选唯一索引防止同一用户对同一商品同时存在两条 Pending 举报。
+
             migrationBuilder.CreateIndex(
                 name: "IX_Reports_ListingId",
                 table: "Reports",
@@ -115,7 +115,7 @@ namespace WebApplication1.Migrations
                 columns: new[] { "Status", "CreatedAt" });
         }
 
-        // 回退时按照依赖关系先删新表，再删 Listings.IsHidden 字段。
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

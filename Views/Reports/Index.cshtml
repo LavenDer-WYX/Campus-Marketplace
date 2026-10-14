@@ -1,21 +1,21 @@
-@* 这些记录已经在 Controller 按当前用户 Id 筛选过。 *@
+
 @model IReadOnlyList<Report>
 @{
-    // 设置页面标题。
+
     ViewData["Title"] = "My reports";
 }
 
 <h1>My reports</h1>
 <p>Check the progress of reports you submitted.</p>
 
-@* 第一次使用举报功能时，还没有历史记录。 *@
+
 @if (Model.Count == 0)
 {
     <p>You have not reported any items.</p>
 }
 else
 {
-    @* 一条举报显示为一张卡片，长原因在小屏幕上也能换行。 *@
+
     @foreach (var report in Model)
     {
         <article class="card mb-3">
@@ -23,15 +23,15 @@ else
                 <h2 class="h5">@report.ListingTitle</h2>
                 <p><strong>Status:</strong> @report.Status</p>
                 <p><strong>Submitted (UTC):</strong> @report.CreatedAt.ToString("yyyy-MM-dd HH:mm")</p>
-                @* 输入内容作为普通文本显示，不使用 Html.Raw。 *@
+
                 <p style="white-space: pre-wrap; overflow-wrap: anywhere;">@report.Reason</p>
-                @* 管理员处理后显示说明和时间，待处理记录不显示这部分。 *@
+
                 @if (report.Status != "Pending")
                 {
                     <p><strong>Reviewed (UTC):</strong> @report.ResolvedAt?.ToString("yyyy-MM-dd HH:mm")</p>
                     <p style="white-space: pre-wrap; overflow-wrap: anywhere;"><strong>Review note:</strong> @(report.AdminNote ?? "No additional note.")</p>
                 }
-                @* 商品删除后 ListingId 会变成 null，这里说明原因但保留举报记录。 *@
+
                 @if (report.ListingId == null)
                 {
                     <p class="text-muted">The item has been deleted.</p>
@@ -41,5 +41,5 @@ else
     }
 }
 
-@* 回到商品列表，用户从具体商品详情页发起新举报。 *@
+
 <a asp-controller="Listings" asp-action="Index">Browse items</a>

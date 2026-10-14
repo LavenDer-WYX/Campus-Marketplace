@@ -8,7 +8,7 @@ body {
  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* 导航栏先保持最简单的样子 */
+
 .navbar {
   min-height: 65px;
 }
@@ -36,7 +36,7 @@ h3 {
  font-size: 18px;
 }
 
-/* 首页上面的标题 */
+
 .home-title {
   padding-bottom: 25px;
  border-bottom: 1px solid #cccccc;
@@ -50,7 +50,7 @@ h3 {
  margin-top: 40px;
 }
 
-/* 搜索区域只有输入框和按钮 */
+
 .simple-search {
  display: flex;
  gap: 10px;
@@ -67,7 +67,7 @@ h3 {
  gap: 10px;
 }
 
-/* 商品卡片现在只是占位框 */
+
 .item-grid {
  display: grid;
  grid-template-columns: repeat(3, 1fr);
@@ -92,12 +92,12 @@ h3 {
  margin-bottom: 8px;
 }
 
-/* 登录页面不需要占满整个屏幕 */
+
 .small-page {
   max-width: 500px;
 }
 
-/* 商品详情页面的左右框架 */
+
 .details-layout {
   display: grid;
  grid-template-columns: 1fr 1fr;
@@ -131,7 +131,7 @@ h3 {
  margin-bottom: 20px;
 }
 
-/* 聊天页面只是分成左右两块 */
+
 .chat-layout {
  display: grid;
  grid-template-columns: 250px 1fr;
@@ -191,7 +191,7 @@ h3 {
   gap: 10px;
 }
 
-/* 个人资料的基本框架 */
+
 .profile-basic {
  display: flex;
  gap: 20px;
@@ -221,7 +221,7 @@ h3 {
  font-size: 14px;
 }
 
-/* 手机宽度下把左右结构改成上下结构 */
+
 @media (max-width: 768px) {
  .page-content {
    padding-top: 25px;
@@ -258,9 +258,9 @@ h3 {
   }
 }
 
-/* ========== 首页商品流样式（Week 3-4, by Shuo Li） ========== */
 
-/* 顶部标题区域 */
+
+
 .home-hero {
   padding: 30px 0 30px;
   border-bottom: 1px solid #cccccc;
@@ -271,7 +271,7 @@ h3 {
   max-width: 600px;
 }
 
-/* 商品卡片网格 */
+
 .item-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -291,7 +291,7 @@ h3 {
   transform: translateY(-2px);
 }
 
-/* 商品图片占位：每个分类一个颜色，以后换成真实图片 */
+
 .item-image {
   height: 150px;
   display: flex;
@@ -346,7 +346,7 @@ h3 {
   font-size: 14px;
 }
 
-/* 收藏按钮：点击后变成实心红心（效果在 site.js） */
+
 .fav-btn {
   border: none;
   background: none;
@@ -361,7 +361,7 @@ h3 {
   color: #d6336c;
 }
 
-/* 成色标签 */
+
 .condition-badge {
   display: inline-block;
   font-size: 12px;
@@ -374,12 +374,12 @@ h3 {
 .condition-good    { background: #fff3bf; color: #946800; }
 .condition-fair    { background: #ffe3e3; color: #c92a2a; }
 
-/* 没有搜索结果时的提示文字 */
+
 .no-result-text {
   color: #777777;
 }
 
-/* 手机宽度下网格变两列/一列 */
+
 @media (max-width: 992px) {
   .item-grid {
     grid-template-columns: repeat(2, 1fr);

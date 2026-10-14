@@ -34,7 +34,7 @@ Controller 不直接保存数据文件，View 也不直接查询数据库。DbCo
 
 `AddAuthorization()` 定义 `AdminOnly`。Controller 写 `[Authorize(Policy = "AdminOnly")]` 后，普通学生即使手动输入 `/Admin` 也无法访问。
 
-`AddHttpClient<ListingAssistantService>()` 创建 AI 请求客户端，设置 20 秒超时、64 KB 响应上限并禁止自动重定向。`AddRateLimiter()` 将每位用户的 AI 草稿请求限制为每分钟 5 次。
+`AddHttpClient<ListingAssistantService>()` 和 `AddHttpClient<SmartSearchService>()` 分别创建描述助手与智能搜索的 AI 请求客户端，都设置 20 秒超时、64 KB 响应上限并禁止自动重定向。`AddRateLimiter()` 让两种 AI 请求共用每位用户每分钟 5 次的限制。
 
 程序启动时运行 `MigrateAsync()`，只应用尚未运行的 Migration，不会每次清空数据库。之后创建 `Student` 和 `Admin` 两个角色。
 
@@ -54,7 +54,7 @@ Controller 不直接保存数据文件，View 也不直接查询数据库。DbCo
 dotnet user-secrets set "ListingAssistant:ApiKey" "你的火山方舟API Key"
 ```
 
-如果账户使用的不是默认模型，再执行 `dotnet user-secrets set "ListingAssistant:Model" "控制台中显示的Model ID或Endpoint ID"`。请求体将 `thinking` 设为 `disabled`，因为商品描述不需要深度思考，这样返回更快并减少 token 消耗。没有配置密钥时，AI 描述按钮返回明确提示，不会发送外部请求；本地数据库价格参考仍然能运行。
+如果账户使用的不是默认模型，再执行 `dotnet user-secrets set "ListingAssistant:Model" "控制台中显示的Model ID或Endpoint ID"`。请求体将 `thinking` 设为 `disabled`，因为描述草稿、价格建议和搜索条件提取都不需要深度思考，这样返回更快并减少 token 消耗。没有配置密钥时，AI 描述与价格按钮返回明确提示；智能搜索自动退回普通关键词搜索；用户仍可手动填写描述和价格。
 
 ## Models 与数据库表
 
@@ -119,15 +119,19 @@ dotnet user-secrets set "ListingAssistant:ApiKey" "你的火山方舟API Key"
 
 `AdminController` 使用 `AdminOnly`，显示统计、举报列表和详情。管理员可以关闭举报，或隐藏违规商品。隐藏时同时更新商品、举报和通知。
 
-`ListingAssistantController` 提供两个 POST 接口。`Generate` 调用外部 AI 生成可编辑草稿；`Price` 只统计本地数据库挂牌价，不调用 AI。
+`ListingsController.SmartSearch` 接收登录用户的一句自然语言，把它交给 `SmartSearchService` 解析；随后仍由 `Index` 使用 EF Core 查询真实商品。AI 不会直接生成商品，也不会直接拼接 SQL。
 
-## AI 与价格参考
+`ListingAssistantController` 提供两个 POST 接口。`Generate` 调用外部 AI 生成可编辑草稿；`Price` 把当前商品资料和本地匿名价格统计交给 AI，返回建议价格、范围和理由。两个接口都需要登录、防伪令牌，并共用每位用户每分钟 5 次的限流。
+
+## AI 描述、智能搜索与价格建议
 
 `ListingAssistantService.GenerateDescriptionAsync()` 只发送商品标题、分类、成色、使用时间和配件。它不读取邮箱、学号、密码或聊天内容。返回内容先显示为草稿，用户必须点击 `Use this draft` 才会复制到描述框，仍需检查后再提交商品。
 
-外部服务的返回格式按 Chat Completions 的 `choices[0].message.content` 读取。代码处理未配置、凭据错误、限额、超时、非 JSON、空回答和过长回答。项目没有包含任何真实密钥，也没有在开发中实际进行付费 AI 调用。
+`SmartSearchService.ParseAsync()` 只发送用户输入的搜索句子和数据库现有分类名称。豆包返回关键词、分类、价格、成色、地点、商品类型、发布时间和排序方式的 JSON。服务器再次使用分类、成色、类型和数值范围白名单检查；检查后的条件才会进入 `ListingsController.Index`，由 EF Core 参数化查询数据库。页面显示 “AI understood” 说明，用户可以检查 AI 是否理解正确。AI 不可用时退回普通关键词搜索。
 
-`SuggestPriceAsync()` 查询最近最多 100 个未隐藏的同分类、同成色、正价格 Sale 商品，计算平均挂牌价和实际最小/最大值。没有同成色样本时才退回同分类全部成色。它是简单数据库统计，不是训练出的 AI 估价，也不代表真实成交价格。
+外部服务的返回格式按 Chat Completions 的 `choices[0].message.content` 读取。代码处理未配置、凭据错误、限额、超时、非 JSON、空回答和异常条件。项目不提交真实密钥，也不会把邮箱、密码、学号、聊天或完整用户资料发送给搜索模型。
+
+`SuggestPriceAsync()` 先在本地查询最近最多 30 个未隐藏的同分类、同成色、正价格 Sale 商品。没有同成色样本时才退回同分类全部成色。服务器只计算样本数量、平均价、最低价和最高价，不会把其他用户的商品标题或描述发给外部服务。豆包根据当前卖家填写的标题、分类、成色、使用时间、配件和这些匿名统计数字，返回建议价格、建议范围和简短理由。服务器会检查价格必须为正数、范围顺序正确且不超过上限；用户仍要点击 `Use suggested price` 才会写入价格框。它只是挂牌价建议，不代表真实成交价格或专业估值。
 
 ## 举报和管理员流程
 
@@ -177,6 +181,7 @@ dotnet run -- --make-admin 已注册的邮箱地址
 7. `TradeRequest` 和 `TradeRequestsController`
 8. `Notification`、`Report`、`NotificationsController`、`ReportsController`
 9. `AdminController`
-10. `ListingAssistantService`
+10. `SmartSearchViewModels`、`SmartSearchService` 和 `ListingsController.SmartSearch`
+11. `ListingAssistantService`
 
 每次阅读一个 Action，可以按“输入是什么、身份怎么取得、查询了什么、检查了什么、保存了什么、最后跳到哪里”六个问题逐行看。
